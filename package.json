@@ -1,0 +1,15 @@
+{
+  "name": "ovh-exporter",
+  "version": "0.1.0",
+  "description": "OVH cloud metric exporter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ssube",
+  "license": "MIT",
+  "dependencies": {
+    "ovh": "^2.0.3",
+    "prom-client": "^13.1.0"
+  }
+}
