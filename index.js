@@ -35,25 +35,25 @@ promClient.collectDefaultMetrics({
 
 const metrics = {
   bucketBytes: new promClient.Gauge({
-    name: 'swift_bucket_bytes_total',
+    name: 'ovh_swift_bucket_bytes_total',
     help: 'Swift bucket size in bytes',
     labelNames: ['bucket', 'region'],
     registers: [registry],
   }),
   bucketObjects: new promClient.Gauge({
-    name: 'swift_bucket_objects_total',
+    name: 'ovh_swift_bucket_objects_total',
     help: 'Swift bucket object count',
     labelNames: ['bucket', 'region'],
     registers: [registry],
   }),
   quotaMax: new promClient.Gauge({
-    name: 'project_quota_max',
+    name: 'ovh_project_quota_max',
     help: 'project max resource quotas',
     labelNames: ['region', 'resource'],
     registers: [registry],
   }),
   quotaUsed: new promClient.Gauge({
-    name: 'project_quota_used',
+    name: 'ovh_project_quota_used',
     help: 'project used resource quotas',
     labelNames: ['region', 'resource'],
     registers: [registry],

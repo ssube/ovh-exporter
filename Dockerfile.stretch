@@ -1,0 +1,11 @@
+FROM apextoaster/node:16.3
+
+# copy build output
+COPY index.js package.json yarn.lock /app/
+
+WORKDIR /app
+
+# install modules
+RUN yarn install --production
+
+ENTRYPOINT [ "node", "/app/index.js" ]

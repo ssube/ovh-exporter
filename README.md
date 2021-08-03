@@ -32,26 +32,26 @@ The following environment variables must be set:
 The API has a number of GET endpoints that expose project usage and quota information. Some of these are
 collected and exposed as Prometheus metrics.
 
-- `project_quota_max`
+- `ovh_project_quota_max`
   - `region`
     - name
   - `resource`
     - `cores`
     - `instances`
     - `memory`
-- `project_quota_used`
+- `ovh_project_quota_used`
   - `region`
     - name
   - `resource`
     - `cores`
     - `instances`
     - `memory`
-- `swift_bucket_bytes_total`
+- `ovh_swift_bucket_bytes_total`
   - `bucket`
     - name
   - `region`
     - name
-- `swift_bucket_objects_total`
+- `ovh_swift_bucket_objects_total`
   - `bucket`
     - name
   - `region`
