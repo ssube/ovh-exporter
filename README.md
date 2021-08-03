@@ -32,9 +32,29 @@ The following environment variables must be set:
 The API has a number of GET endpoints that expose project usage and quota information. Some of these are
 collected and exposed as Prometheus metrics.
 
+- `project_quota_max`
+  - `region`
+    - name
+  - `resource`
+    - `cores`
+    - `instances`
+    - `memory`
+- `project_quota_used`
+  - `region`
+    - name
+  - `resource`
+    - `cores`
+    - `instances`
+    - `memory`
 - `swift_bucket_bytes_total`
   - `bucket`
+    - name
+  - `region`
+    - name
 - `swift_bucket_objects_total`
   - `bucket`
+    - name
+  - `region`
+    - name
 
-Metrics are fetched on an interval and cached, to reduce load on the API.
+Metrics are fetched once on startup, then on a scheduled interval, by default every 10 minutes.

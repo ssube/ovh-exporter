@@ -8,8 +8,8 @@ const config = {
   secret: process.env['OVH_SECRET'] || 'app secret required',
   consumer: process.env['OVH_CONSUMER'] || 'consumer key required',
   project: process.env['OVH_PROJECT'] || 'project id required',
-  interval: 60000,
-  port: 3000,
+  interval: Number(process.env['OVH_INTERVAL'] || '600000'),
+  port: Number(process.env['OVH_PORT'] || '3000'),
 }
 
 const ovh = ovhClient({
