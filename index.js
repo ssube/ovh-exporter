@@ -37,20 +37,30 @@ const metrics = {
   bucketBytes: new promClient.Gauge({
     name: 'swift_bucket_bytes_total',
     help: 'Swift bucket size in bytes',
-    labelNames: ['bucket'],
+    labelNames: ['bucket', 'region'],
     registers: [registry],
   }),
   bucketObjects: new promClient.Gauge({
     name: 'swift_bucket_objects_total',
     help: 'Swift bucket object count',
-    labelNames: ['bucket'],
+    labelNames: ['bucket', 'region'],
+    registers: [registry],
+  }),
+  quotaMax: new promClient.Gauge({
+    name: 'project_quota_max',
+    help: 'project max resource quotas',
+    labelNames: ['region', 'resource'],
+    registers: [registry],
+  }),
+  quotaUsed: new promClient.Gauge({
+    name: 'project_quota_used',
+    help: 'project used resource quotas',
+    labelNames: ['region', 'resource'],
     registers: [registry],
   }),
 };
 
-function collectMetrics() {
-  console.log('collecting metrics');
-
+function collectSwiftContainers() {
   ovh.request('GET', `/cloud/project/${config.project}/storage`, (err, ctrs) => {
     if (err) {
       console.error('error listing Swift containers', err);
@@ -62,13 +72,69 @@ function collectMetrics() {
     for (const ctr of ctrs) {
       metrics.bucketBytes.set({
         bucket: ctr.name,
+        region: ctr.region,
       }, ctr.storedBytes)
 
       metrics.bucketObjects.set({
         bucket: ctr.name,
+        region: ctr.region,
       }, ctr.storedObjects)
     }
   });
+}
+
+function collectQuotas() {
+  ovh.request('GET', `/cloud/project/${config.project}/quota`, (err, quotas) => {
+    if (err) {
+      console.error('error getting project quota', err);
+      return;
+    }
+
+    console.log('got project quota', quotas.length);
+
+    for (const quota of quotas) {
+      if (quota.instance === null) {
+        continue;
+      }
+
+      metrics.quotaUsed.set({
+        region: quota.region,
+        resource: 'cores',
+      }, quota.instance.usedCores);
+
+      metrics.quotaMax.set({
+        region: quota.region,
+        resource: 'cores',
+      }, quota.instance.maxCores);
+
+      metrics.quotaUsed.set({
+        region: quota.region,
+        resource: 'instances',
+      }, quota.instance.usedInstances);
+
+      metrics.quotaMax.set({
+        region: quota.region,
+        resource: 'instances',
+      }, quota.instance.maxInstances);
+
+      metrics.quotaUsed.set({
+        region: quota.region,
+        resource: 'memory',
+      }, quota.instance.usedRAM);
+
+      metrics.quotaMax.set({
+        region: quota.region,
+        resource: 'memory',
+      }, quota.instance.maxRam);
+    }
+  });
+}
+
+function collectMetrics() {
+  console.log('collecting metrics');
+
+  collectQuotas();
+  collectSwiftContainers();
 }
 
 function serveMetrics(req, res) {

@@ -1,6 +1,6 @@
 # OVH Exporter
 
-This is a Prometheus exporter for the OVH API.
+This is a Prometheus exporter for the OVH cloud API.
 
 ## API Auth
 
@@ -36,3 +36,5 @@ collected and exposed as Prometheus metrics.
   - `bucket`
 - `swift_bucket_objects_total`
   - `bucket`
+
+Metrics are fetched on an interval and cached, to reduce load on the API.
